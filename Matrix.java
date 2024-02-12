@@ -532,21 +532,30 @@ public class Matrix {
     }
     public boolean isMatrixSingular()
     { return this.calculateDeterminant() == 0; }
-    public double powMethod(Vector y0)
+    public double powMethod(Vector yPrev)
     {
         double maxAbsLambda;
-        if (y0 == null)
+        if (yPrev == null)
         {
-            y0 = new Vector(this.rowsCount);
-            y0.createRandomVector(1, 100);
+            yPrev = new Vector(this.rowsCount);
+            yPrev.createRandomVector(1, 100);
         }
-        double normaY = y0.ChebyshevNorm();
-        Vector x0 = y0.cloneVector().constantMultiplication(1 / normaY);
-        Vector x_K = x0.cloneVector(); double lambda_K;
+        double normaY = yPrev.ChebyshevNorm();
+        Vector xPrev = yPrev.cloneVector().constantMultiplication(1 / normaY);
+        Vector xNew = xPrev.cloneVector();
+        double lambda_K = 0; int count = 0;
         do {
-            Vector y_K = this.matrixAndVectorMultiplication(x_K).cloneVector();
+            Vector y_K = this.matrixAndVectorMultiplication(xNew).cloneVector();
             normaY = y_K.ChebyshevNorm();
-            x_K = y_K.cloneVector().constantMultiplication(1 / normaY);
+            xNew = y_K.cloneVector().constantMultiplication(1 / normaY);
+            MathBase eps = new MathBase();
+            for (int i = 0; i < xNew.getVectorSize(); i++)
+                if (Math.abs(xNew.getItem(i)) > eps.getEpsilon())
+                {
+                    lambda_K += (y_K.getItem(i) / xNew.getItem(i));
+                    count++;
+                }
+            lambda_K /= count;
         } while(false);
         return 0;
     }
