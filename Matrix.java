@@ -532,4 +532,24 @@ public class Matrix {
     }
     public boolean isMatrixSingular()
     { return this.calculateDeterminant() == 0; }
+    public double powMethod(Vector y0)
+    {
+        double maxAbsLambda;
+        if (y0 == null)
+        {
+            y0 = new Vector(this.rowsCount);
+            y0.createRandomVector(1, 100);
+        }
+        double normaY = y0.ChebyshevNorm();
+        Vector x0 = y0.cloneVector().constantMultiplication(1 / normaY);
+        Vector x_K = x0.cloneVector(); double lambda_K;
+        do {
+            Vector y_K = this.matrixAndVectorMultiplication(x_K).cloneVector();
+            normaY = y_K.ChebyshevNorm();
+            x_K = y_K.cloneVector().constantMultiplication(1 / normaY);
+        } while(false);
+        return 0;
+    }
+    /* СТЕПЕННОЙ МЕТОД
+    АЛГОРИТМ ВЫЧИСЛЕНИЯ НАИБОЛЬШЕГО ПО МОДУЛЮ СОБСТВЕННОГО ЗНАЧЕНИЯ МАТРИЦЫ */
 }

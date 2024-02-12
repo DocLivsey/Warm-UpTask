@@ -9,6 +9,12 @@ public class Main {
     public static final String OUTPUT = "\u001B[35m"; // PURPLE
     public static final String HEADER_OUTPUT = "\u001B[36m"; // CYAN
     public static void main(String[] args) {
-       
+       Vector vector = new Vector(3);
+       Matrix matrix = new Matrix(3, 3);
+       matrix.createRandomMatrix(-10, 10);
+
+       matrix.powMethod(null);
+       vector.createRandomVector(-10, 10);
+       matrix.powMethod(vector);
     }
 }
