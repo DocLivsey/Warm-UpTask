@@ -532,33 +532,37 @@ public class Matrix {
     }
     public boolean isMatrixSingular()
     { return this.calculateDeterminant() == 0; }
-    public double powMethod(Vector yPrev)
+    public double powMethod(Vector y_0)
     {
         double maxAbsLambda;
-        if (yPrev == null)
+        if (y_0 == null)
         {
-            yPrev = new Vector(this.rowsCount);
-            yPrev.createRandomVector(1, 100);
+            y_0 = new Vector(this.rowsCount);
+            y_0.createRandomVector(0, 10);
         }
-        double normaY = yPrev.ChebyshevNorm();
-        Vector xPrev = yPrev.cloneVector().constantMultiplication(1 / normaY);
-        Vector xNew = xPrev.cloneVector();
+        double normaY = y_0.ChebyshevNorm();
+        Vector x_0 = y_0.cloneVector().constantMultiplication(1 / normaY);
         double lambda_K = 0; int count = 0;
         MathBase eps = new MathBase();
+        Vector xPrev = x_0.cloneVector();
         do {
             maxAbsLambda = lambda_K;
-            Vector y_K = this.matrixAndVectorMultiplication(xNew).cloneVector();
-            normaY = y_K.ChebyshevNorm();
-            xNew = y_K.cloneVector().constantMultiplication(1 / normaY);
-            for (int i = 0; i < xNew.getVectorSize(); i++)
-                if (Math.abs(xNew.getItem(i)) > eps.getEpsilon())
+            Vector yNew = this.matrixAndVectorMultiplication(xPrev).cloneVector();
+            normaY = yNew.ChebyshevNorm();
+            for (int i = 0; i < xPrev.getVectorSize(); i++)
+                if (Math.abs(xPrev.getItem(i)) > eps.getEpsilon())
                 {
-                    lambda_K += (y_K.getItem(i) / xNew.getItem(i));
+                    lambda_K = (yNew.getItem(i) / xPrev.getItem(i));
                     count++;
                 }
-            lambda_K /= count;
+            //lambda_K /= count;
+            //System.out.println("lambda = " + lambda_K);
+
+            Vector xNew = yNew.cloneVector().constantMultiplication(1 / normaY);
+            xPrev = xNew.cloneVector();
         } while(Math.abs(lambda_K - maxAbsLambda) >= eps.getEpsilon());
         maxAbsLambda = lambda_K;
+        System.out.println(Math.round(maxAbsLambda));
         return maxAbsLambda;
     }
     /* СТЕПЕННОЙ МЕТОД
