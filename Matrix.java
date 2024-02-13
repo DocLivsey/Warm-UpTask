@@ -544,11 +544,12 @@ public class Matrix {
         Vector xPrev = yPrev.cloneVector().constantMultiplication(1 / normaY);
         Vector xNew = xPrev.cloneVector();
         double lambda_K = 0; int count = 0;
+        MathBase eps = new MathBase();
         do {
+            maxAbsLambda = lambda_K;
             Vector y_K = this.matrixAndVectorMultiplication(xNew).cloneVector();
             normaY = y_K.ChebyshevNorm();
             xNew = y_K.cloneVector().constantMultiplication(1 / normaY);
-            MathBase eps = new MathBase();
             for (int i = 0; i < xNew.getVectorSize(); i++)
                 if (Math.abs(xNew.getItem(i)) > eps.getEpsilon())
                 {
@@ -556,8 +557,9 @@ public class Matrix {
                     count++;
                 }
             lambda_K /= count;
-        } while(false);
-        return 0;
+        } while(Math.abs(lambda_K - maxAbsLambda) >= eps.getEpsilon());
+        maxAbsLambda = lambda_K;
+        return maxAbsLambda;
     }
     /* СТЕПЕННОЙ МЕТОД
     АЛГОРИТМ ВЫЧИСЛЕНИЯ НАИБОЛЬШЕГО ПО МОДУЛЮ СОБСТВЕННОГО ЗНАЧЕНИЯ МАТРИЦЫ */
