@@ -534,6 +534,8 @@ public class Matrix {
     { return this.calculateDeterminant() == 0; }
     public double powMethod(Vector y_0)
     {
+        System.out.println(Main.ERROR + "Внимание, степенной метод работает только для матриц простой структуры" + Main.RESET);
+
         double maxAbsLambda;
         if (y_0 == null)
         {
@@ -542,7 +544,8 @@ public class Matrix {
         }
         double normaY = y_0.ChebyshevNorm();
         Vector x_0 = y_0.cloneVector().constantMultiplication(1 / normaY);
-        double lambda_K = 0; int count = 0;
+        double lambda_K = 0;
+        //int count = 0;
         MathBase eps = new MathBase();
         Vector xPrev = x_0.cloneVector();
         do {
@@ -553,7 +556,7 @@ public class Matrix {
                 if (Math.abs(xPrev.getItem(i)) > eps.getEpsilon())
                 {
                     lambda_K = (yNew.getItem(i) / xPrev.getItem(i));
-                    count++;
+                    //count++;
                 }
             //lambda_K /= count;
             //System.out.println("lambda = " + lambda_K);
@@ -562,7 +565,6 @@ public class Matrix {
             xPrev = xNew.cloneVector();
         } while(Math.abs(lambda_K - maxAbsLambda) >= eps.getEpsilon());
         maxAbsLambda = lambda_K;
-        System.out.println(Math.round(maxAbsLambda));
         return maxAbsLambda;
     }
     /* СТЕПЕННОЙ МЕТОД

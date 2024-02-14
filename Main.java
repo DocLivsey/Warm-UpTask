@@ -12,6 +12,7 @@ public class Main {
         Matrix matrix = new Matrix(pathToMatrix);
 
         matrix.printMatrix();
+        System.out.println("Наибольшее по модулю собственное значение заданной матрицы:");
         System.out.println(matrix.powMethod(null));
     }
 }
