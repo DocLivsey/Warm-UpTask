@@ -545,22 +545,22 @@ public class Matrix {
         double normaY = y_0.ChebyshevNorm();
         Vector x_0 = y_0.cloneVector().constantMultiplication(1 / normaY);
         double lambda_K = 0;
-        //int count = 0;
         MathBase eps = new MathBase();
         Vector xPrev = x_0.cloneVector();
         do {
             maxAbsLambda = lambda_K;
             Vector yNew = this.matrixAndVectorMultiplication(xPrev).cloneVector();
             normaY = yNew.ChebyshevNorm();
+            //int count = 0;
             for (int i = 0; i < xPrev.getVectorSize(); i++)
                 if (Math.abs(xPrev.getItem(i)) > eps.getEpsilon())
                 {
                     lambda_K = (yNew.getItem(i) / xPrev.getItem(i));
                     //count++;
+                    //System.out.println("count = " + count + " lambda = " + lambda_K);
                 }
             //lambda_K /= count;
             //System.out.println("lambda = " + lambda_K);
-
             Vector xNew = yNew.cloneVector().constantMultiplication(1 / normaY);
             xPrev = xNew.cloneVector();
         } while(Math.abs(lambda_K - maxAbsLambda) >= eps.getEpsilon());
